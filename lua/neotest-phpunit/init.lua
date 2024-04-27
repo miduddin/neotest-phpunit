@@ -212,6 +212,18 @@ function NeotestAdapter.results(test, result, tree)
     return {}
   end
 
+  local ok, id_table = pcall(utils.get_id_table, tree:to_list())
+  if not ok then
+    logger.error("Could not get id table", output_file)
+    return {}
+  end
+
+  local ok, results = pcall(utils.remap_result, results, id_table)
+  if not ok then
+    logger.error("Could not remap result", output_file)
+    return {}
+  end
+
   logger.trace("Results:", results)
   return results
 end
